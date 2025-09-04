@@ -1,19 +1,31 @@
-"use client";
+import type React from "react"
+import type { Metadata } from "next"
+import { GeistSans } from "geist/font/sans"
+import { GeistMono } from "geist/font/mono"
+import { Analytics } from "@vercel/analytics/next"
+import { AuthProvider } from "@/lib/auth-context"
+import { Suspense } from "react"
+import "./globals.css"
 
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import theme from "../lib/theme";
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body>
-        <ThemeProvider theme={theme}>
-          <CssBaseline /> {/* 重置默认样式 */}
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
-  );
+export const metadata: Metadata = {
+  title: "GameHub - Multiplayer Gaming Platform",
+  description: "Join the ultimate multiplayer gaming experience",
+  generator: "v0.app",
 }
 
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html lang="en">
+      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
+        <Suspense fallback={<div>Loading...</div>}>
+          <AuthProvider>{children}</AuthProvider>
+        </Suspense>
+        <Analytics />
+      </body>
+    </html>
+  )
+}
